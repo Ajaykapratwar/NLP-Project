@@ -1,0 +1,21 @@
+.env
+nlpvenv/
+.nlpvenv/
+.env.example
+__pycache__/
+.venv/
+venv/
+.vscode/
+.idea/
+*.pyc
+data/
+*.json
+
+# Ignore vector DB
+*.faiss
+*.pkl
+*.db
+
+# Python cache
+__pycache__/
+*.pyc

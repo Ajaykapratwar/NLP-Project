@@ -1,0 +1,13 @@
+streamlit
+groq
+rank-bm25
+scikit-learn
+nltk
+pdfplumber
+pandas
+beautifulsoup4
+requests
+langchain-community
+tavily-python
+python-dotenv
+lxml
