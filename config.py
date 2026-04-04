@@ -6,10 +6,10 @@ load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY", "")
 GROQ_MODEL = "llama-3.1-8b-instant"
-TOP_K = 5
-RELEVANCE_THRESHOLD = 0.5
-CHUNK_SIZE = 150
-CHUNK_OVERLAP = 2
+TOP_K = 3
+RELEVANCE_THRESHOLD = 0.3
+CHUNK_SIZE = 80
+CHUNK_OVERLAP = 1
 STORE_PATH = "data/document_store.json"
 WEB_SEARCH_MAX_RESULTS = 4
 SYSTEM_PROMPT = """You are an intelligent QA assistant.

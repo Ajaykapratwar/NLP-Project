@@ -22,7 +22,7 @@ class TextPreprocessor:
     def clean(self, text: str) -> str:
         """Remove noise and collapse whitespace."""
         text = re.sub(r'\s+', ' ', text)
-        text = re.sub(r'[^\w\s\.,!\?-]', '', text)
+        text = re.sub(r"[^\x20-\x7E₹€£¥]", " ", text)
         return text.strip()
 
     def tokenize(self, text: str) -> list[str]:
@@ -34,7 +34,7 @@ class TextPreprocessor:
             return text.lower().split()
 
     def remove_stopwords(self, tokens: list[str]) -> list[str]:
-        return [t for t in tokens if t not in self.stop_words and t.isalnum()]
+        return [t for t in tokens if t not in self.stop_words and (t.isalnum() or any(c.isdigit() or c in '₹€£¥' for c in t))]
 
     def lemmatize(self, tokens: list[str]) -> list[str]:
         return [self.lemmatizer.lemmatize(t) for t in tokens]

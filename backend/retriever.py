@@ -33,12 +33,17 @@ class BM25Retriever:
             return [], [], 0.0
             
         scores = self.bm25.get_scores(query_tokens)
-        max_score = float(np.max(scores)) if len(scores) > 0 else 0.0
         
         top_n = min(top_k, len(self.chunks))
         top_indices = np.argsort(scores)[::-1][:top_n]
         
-        top_chunks = [self.chunks[i] for i in top_indices if scores[i] > 0]
-        top_metadata = [self.metadata[i] for i in top_indices if scores[i] > 0]
+        top_chunks = []
+        top_metadata = []
+        max_score = 0.0
+        for i in top_indices:
+            if scores[i] >= 0.3:
+                top_chunks.append(self.chunks[i])
+                top_metadata.append(self.metadata[i])
+                max_score = max(max_score, float(scores[i]))
         
         return top_chunks, top_metadata, max_score

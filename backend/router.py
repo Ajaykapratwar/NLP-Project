@@ -4,9 +4,11 @@ class QueryRouter:
     """Routes query based on BM25 max score."""
     
     def route(self, max_score: float, chunks: list[str]) -> str:
-        if max_score >= RELEVANCE_THRESHOLD and chunks:
-            return "document"
-        return "web"
+        if not chunks:
+            return "web"
+        if max_score < RELEVANCE_THRESHOLD:
+            return "web"
+        return "document"
 
     def explain(self, max_score: float, chunks: list[str]) -> str:
         route = self.route(max_score, chunks)

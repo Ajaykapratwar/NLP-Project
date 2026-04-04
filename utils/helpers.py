@@ -27,7 +27,10 @@ def build_context(chunks: list[str], metadata: list[dict]) -> str:
     for chunk, meta in zip(chunks, metadata):
         source = meta.get("source", "Unknown")
         context_parts.append(f"[Source: {source}]\n{chunk}\n")
-    return "\n".join(context_parts)
+    full_context = "\n".join(context_parts)
+    if len(full_context) > 2500:
+        return full_context[:2500] + "\n...[context truncated for length]"
+    return full_context
 
 def unique_sources(metadata: list[dict]) -> list[str]:
     """Get a de-duplicated list of sources from metadata."""

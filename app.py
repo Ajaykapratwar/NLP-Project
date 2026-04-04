@@ -99,6 +99,18 @@ def answer_query(components, query):
         with st.spinner("✍️ Formatting answer…"):
             answer = llm.format_from_documents(query, context)
             
+        fallback_phrases = [
+            "answer not found", "not available in",
+            "not found in", "insufficient", "not provided"
+        ]
+        if any(p in answer.lower() for p in fallback_phrases):
+            st.info("📭 Answer not found in documents. Searching the web…")
+            with st.spinner("🌐 Searching the web…"):
+                web_context = web.search(query)
+            with st.spinner("✍️ Formatting web answer…"):
+                answer = llm.format_from_web(query, web_context)
+            return f"🌐 **[Web Search Result]**\n\n{answer}", "web", [], [{"source": "Web Search (Tavily)"}]
+
         sources = unique_sources(metadata)
         source_str = "\n\n**Sources:**\n" + "\n".join([f"- {s}" for s in sources])
         return answer + source_str, route, chunks, metadata

@@ -34,10 +34,15 @@ class DocumentLoader:
     def load_csv(path: str) -> str:
         try:
             df = pd.read_csv(path)
+            # Normalize column names to lowercase for better matching
+            df.columns = [c.lower().strip() for c in df.columns]
             rows = []
-            for _, row in df.iterrows():
-                row_str = ", ".join([f"{col}: {val}" for col, val in row.items()])
-                rows.append(row_str)
+            for i, row in df.iterrows():
+                parts = []
+                for col, val in row.items():
+                    if pd.notna(val):
+                        parts.append(f"{col}: {val}")
+                rows.append(f"Row {i+1} | " + " | ".join(parts))
             return "\n".join(rows)
         except Exception as e:
             print(f"Error loading CSV {path}: {e}")
