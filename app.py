@@ -24,6 +24,10 @@ from utils.helpers import save_uploaded_file, parse_urls, build_context, unique_
 @st.cache_resource
 def init_components():
     store = DocumentStore()
+    
+    # Clear store on server startup (once per server lifetime)
+    store.clear()
+    
     retriever = BM25Retriever(store)
     retriever.build_index()
     loader = DocumentLoader()
@@ -41,6 +45,7 @@ def init_components():
         "web_searcher": web_searcher,
         "llm": groq_formatter
     }
+
 
 # 3. Process documents
 def process_documents(components, uploaded_files, urls):
