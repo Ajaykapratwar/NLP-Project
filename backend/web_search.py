@@ -1,6 +1,6 @@
 import os
 import warnings
-from config import WEB_SEARCH_MAX_RESULTS, TAVILY_API_KEY
+from config import WEB_SEARCH_MAX_RESULTS
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -9,19 +9,18 @@ with warnings.catch_warnings():
 class WebSearcher:
     """Searches the web using Tavily Search."""
     
-    def __init__(self):
-        if TAVILY_API_KEY:
-            os.environ["TAVILY_API_KEY"] = TAVILY_API_KEY
+    def __init__(self, api_key: str):
+        if not api_key:
+            raise ValueError("api_key is required for Tavily.")
+        os.environ["TAVILY_API_KEY"] = api_key
             
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
+            # Will pick up the newly set os.environ["TAVILY_API_KEY"]
             self.tavily_tool = TavilySearchResults(max_results=WEB_SEARCH_MAX_RESULTS)
 
     def search(self, query: str) -> str:
         try:
-            if not os.environ.get("TAVILY_API_KEY"):
-                return "Error: TAVILY_API_KEY is missing. Please set it in your .env file."
-                
             results = self.tavily_tool.invoke({"query": query})
             
             if not results:

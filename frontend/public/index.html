@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexGen NLP Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <!-- API Key settings modal overlay (Shown by default if no key in LocalStorage) -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal glass-panel">
+            <h2><i class="fa-solid fa-key"></i> Setup Your Workspace</h2>
+            <p>Welcome! Please provide your API keys. They are stored <strong>locally in your browser</strong> and never saved on our servers.</p>
+            
+            <div class="input-group">
+                <label for="groqKey">Groq API Key</label>
+                <input type="password" id="groqKey" placeholder="gsk_...">
+            </div>
+            
+            <div class="input-group">
+                <label for="tavilyKey">Tavily API Key</label>
+                <input type="password" id="tavilyKey" placeholder="tvly-...">
+            </div>
+            
+            <button id="saveKeysBtn" class="btn primary-btn">Save & Continue <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Main Sidebar -->
+    <nav class="sidebar glass-panel">
+        <div class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+            <h2>NexGen <span>NLP</span></h2>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="active" data-tab="rag"><i class="fa-solid fa-book-open"></i> RAG QA</li>
+            <li data-tab="nl2sql"><i class="fa-solid fa-database"></i> NLP to SQL</li>
+            <li id="openSettings"><i class="fa-solid fa-gear"></i> Settings</li>
+        </ul>
+        
+        <div class="sidebar-info doc-stats" id="docStats">
+            <h4><i class="fa-solid fa-layer-group"></i> Document Store</h4>
+            <p>No documents indexed yet.</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+        
+        <!-- RAG QA View -->
+        <section id="ragView" class="view-section active">
+            
+            <div class="top-bar glass-panel">
+                <div class="upload-tools">
+                    <div class="tool file-upload-wrapper">
+                        <label for="fileUploadInput" class="btn outline-btn"><i class="fa-solid fa-file-arrow-up"></i> Upload Docs</label>
+                        <input type="file" id="fileUploadInput" multiple style="display: none;">
+                    </div>
+                    <div class="tool url-upload-wrapper">
+                        <input type="text" id="urlInput" placeholder="Paste URL here...">
+                        <button id="addUrlBtn" class="btn secondary-btn"><i class="fa-solid fa-link"></i> Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div id="chatHistory" class="chat-history">
+                    <div class="message assistant welcome">
+                        <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="msg-content">
+                            <h3>Hello! I am your AI Knowledge Assistant.</h3>
+                            <p>Upload some documents or URLs above, and then ask me anything about them.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chatInput" placeholder="Ask a question about your documents...">
+                    <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+            
+        </section>
+
+
+        <!-- NLP to SQL View -->
+        <section id="nl2sqlView" class="view-section" style="display: none;">
+            <div class="header-banner">
+                <h1><i class="fa-solid fa-wand-magic-sparkles"></i> Data Magician</h1>
+                <p>Upload a CSV file and ask natural language questions. We'll write the SQL and fetch the results instantly!</p>
+            </div>
+            
+            <div class="sql-workspace glass-panel">
+                <div class="sql-sidebar">
+                    <div class="upload-csv-box">
+                        <i class="fa-solid fa-file-csv fa-3x"></i>
+                        <input type="file" id="csvInput" accept=".csv">
+                        <button id="uploadCsvBtn" class="btn primary-btn mt-2">Load Data</button>
+                    </div>
+                    <div id="csvStatus" class="status-msg"></div>
+                </div>
+                
+                <div class="sql-main">
+                    <div class="query-box">
+                        <input type="text" id="sqlQueryInput" placeholder="E.g., 'Show me the top 5 rows sorted by Revenue'">
+                        <button id="askSqlBtn" class="btn primary-btn"><i class="fa-solid fa-bolt"></i> Run Query</button>
+                    </div>
+                    
+                    <div class="sql-results-container">
+                        <div id="sqlGeneratedCode" class="sql-code-block" style="display: none;">
+                            <!-- Code injected here -->
+                        </div>
+                        <div class="table-responsive" id="sqlTableContainer">
+                            <!-- Table injected here -->
+                            <div class="placeholder-text text-center text-muted" style="padding: 3rem;">Data results will appear here...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <div id="toast" class="toast">Message here</div>
+
+    <script src="app.js"></script>
+</body>
+</html>
